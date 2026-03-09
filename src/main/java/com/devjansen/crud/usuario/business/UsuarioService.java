@@ -2,6 +2,7 @@ package com.devjansen.crud.usuario.business;
 
 import com.devjansen.crud.usuario.infrastructure.entity.Usuario;
 import com.devjansen.crud.usuario.infrastructure.exceptions.ConflictExceptions;
+import com.devjansen.crud.usuario.infrastructure.exceptions.ResourceNotFoundException;
 import com.devjansen.crud.usuario.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,17 @@ public class UsuarioService {
             throw new ConflictExceptions("Email ja cadastrado " + email);
         }
 
+    }
+
+    //busca usuario por email
+    public Usuario buscaUsuarioPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Email não encontrado! " + email));
+    }
+
+    //deleta usuario por email
+    public void deletaUsuarioPorEmail(String email) {
+        usuarioRepository.deleteByEmail(email);
     }
 
 }
